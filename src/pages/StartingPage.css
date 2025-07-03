@@ -1,4 +1,11 @@
 /* src/pages/StartingPage.css */
+/* 브라우저 기본 여백 제거 */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .landing-container {
   height: 100vh;
   display: flex;
@@ -47,18 +54,17 @@
   z-index: 1;   /* 위에 뜨도록 */
 }
 
-
 button {
   display: block;
   width: 200px;
   margin: 12px auto;
-  padding: 12px 0;
+  padding: 10px 0;
   font-size: 16px;
   font-weight: bold;
   background: linear-gradient(to top, #FEBBB3, #FFFFFF);
   border: 1px solid #DD938A;
   box-shadow: #DB968E;
-  border-radius: 20px;
+  border-radius: 30px;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   transition: 0.2s;
