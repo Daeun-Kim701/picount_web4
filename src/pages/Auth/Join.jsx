@@ -1,94 +1,132 @@
-// src/pages/Auth/Join.jsx
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './Join.css'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Join.css';
 
 export default function Join() {
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
-  const [showModal, setShowModal] = useState(false)
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [gender, setGender] = useState(''); // 선택사항
+  const [age, setAge] = useState('');       // 선택사항
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (password !== confirmPassword) {
-      setError('비밀번호가 일치하지 않습니다.')
-      return
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
     }
 
-    setError('')
-    setShowModal(true)
-  }
+    // ✅ 회원 정보 저장
+    const userData = {
+      email,
+      password,
+      nickname,
+      gender: gender || '선택안함', // 선택 안하면 기본값
+      age: age || '선택안함',       // 선택 안하면 기본값
+    };
 
-  const handleModalClose = () => {
-    setShowModal(false)
-    navigate('/login')
-  }
+    localStorage.setItem('user', JSON.stringify(userData));
+
+    // ✅ 가입 완료 alert 후 로그인 화면으로 이동
+    alert('가입이 완료되었습니다!');
+    navigate('/login');
+  };
 
   return (
     <div className="join-page">
       <h2 className="join-title">회원가입</h2>
-
       <div className="join-container">
         <form className="join-form" onSubmit={handleSubmit}>
+          {/* 이메일 */}
           <label>
             <div className="label-row">
               이메일 <span className="required">*</span>
             </div>
-            <input type="email" placeholder="이메일 입력" required />
+            <input
+              type="email"
+              placeholder="이메일 입력"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </label>
 
+          {/* 비밀번호 */}
           <label>
             <div className="label-row">
               비밀번호 <span className="required">*</span>
             </div>
             <input
               type="password"
-              placeholder="영문, 숫자 조합 8자리 이상 15자리 이하"
+              placeholder="비밀번호 입력"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
 
+          {/* 비밀번호 확인 */}
           <label>
             <div className="label-row">
               비밀번호 확인 <span className="required">*</span>
             </div>
             <input
               type="password"
-              placeholder="비밀번호 재입력"
+              placeholder="비밀번호 확인"
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </label>
 
-          {error && <p className="error-message">{error}</p>}
-
+          {/* 닉네임 */}
           <label>
             <div className="label-row">
               닉네임 <span className="required">*</span>
             </div>
-            <input type="text" placeholder="닉네임 입력 (2자 이상 15자 이하)" required />
+            <input
+              type="text"
+              placeholder="닉네임 입력"
+              required
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+            />
           </label>
 
+          {/* 성별 (선택사항) */}
           <div className="gender-age-section">
             <div className="gender">
-              <label>성별</label>
+              <label>성별(선택)</label>
               <div className="gender-options">
-                <label><input type="radio" name="gender" /> 남</label>
-                <label><input type="radio" name="gender" /> 여</label>
+                <label>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="남"
+                    onChange={(e) => setGender(e.target.value)}
+                  />{' '}
+                  남
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="여"
+                    onChange={(e) => setGender(e.target.value)}
+                  />{' '}
+                  여
+                </label>
               </div>
             </div>
 
+            {/* 나이 (선택사항) */}
             <div className="age">
-              <label>나이</label>
-              <select>
-                <option value="">선택</option>
+              <label>나이(선택)</label>
+              <select value={age} onChange={(e) => setAge(e.target.value)}>
+                <option value="">선택안함</option>
                 <option value="10대">10대</option>
                 <option value="20대">20대</option>
                 <option value="30대">30대</option>
@@ -97,18 +135,11 @@ export default function Join() {
             </div>
           </div>
 
-          <button type="submit" className="join-button">회원가입</button>
+          <button type="submit" className="join-button">
+            회원가입
+          </button>
         </form>
       </div>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <p>가입이 완료되었습니다!</p>
-            <button onClick={handleModalClose}>확인</button>
-          </div>
-        </div>
-      )}
     </div>
-  )
+  );
 }
